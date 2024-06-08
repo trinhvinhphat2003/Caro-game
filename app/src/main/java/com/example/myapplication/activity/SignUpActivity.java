@@ -1,15 +1,14 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.myapplication.R;
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText usernameEditText, passwordEditText, confirmEditText;
@@ -53,6 +52,11 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, "Please enter your confirm password", Toast.LENGTH_SHORT).show();
             } else if (!confirm.equals(password)) {
                 Toast.makeText(SignUpActivity.this, "Confirm password must be the same as password", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(SignUpActivity.this, "SIgn up successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

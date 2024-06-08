@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="#F3F4F6"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <!-- Top illustration -->
 

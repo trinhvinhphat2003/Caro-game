@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="#F3F4F6"
-    tools:context=".SignUpActivity">
+    tools:context=".activity.SignUpActivity">
 
     <!-- Top illustration -->
 

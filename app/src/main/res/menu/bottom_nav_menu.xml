@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/menu_background"
+    >
+
+    <item android:title="Home"
+        android:icon="@drawable/baseline_home_24"
+        android:id="@+id/homeTab"
+        />
+    <item android:title="Message"
+        android:icon="@drawable/baseline_message_24"
+        android:id="@+id/messageTab"
+        />
+</menu>

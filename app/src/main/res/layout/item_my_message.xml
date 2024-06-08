@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_marginEnd="6dp"
+    android:layout_marginTop="8dp"
+
+    android:gravity="end"
+    android:orientation="horizontal"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/textViewMyMessage"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@drawable/bg_my_message"
+        android:text="biy iby biy in ibi biib ijib bib bibi hbiib ib i biibbi ihb"
+        android:textColor="@android:color/white"
+        android:layout_gravity="end" />
+
+</LinearLayout>

@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="header_background">#FF0000</color>
+    <color name="menu_background">#FF0000</color> <!-- Thay đổi màu nền menu tùy ý -->
+    <color name="colorPrimaryDark">#000000</color>
 </resources>

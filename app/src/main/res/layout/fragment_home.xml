@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.home.HomeFragment"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+            <ImageView
+                android:id="@+id/backGround"
+                android:layout_width="match_parent"
+                android:layout_height="923dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/gamebg" />
+    <!-- Header Layout -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/top_section_bg"
+        android:gravity="center_vertical"
+    >
+
+    <!-- Avatar Image -->
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/anonymous"
+        android:contentDescription="gello"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/anonymous"/>
+
+    <!-- Player Info Layout -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginEnd="16dp">
+
+        <!-- Player Name -->
+        <TextView
+            android:id="@+id/playerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player Name"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <!-- Coin Display Box -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@drawable/coin_box_background"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Coin Display -->
+        <TextView
+            android:id="@+id/coinDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coins: 1000000"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Recharge Icon -->
+        <ImageView
+            android:id="@+id/rechargeIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_add"
+        android:contentDescription="Charge"/>
+    </LinearLayout>
+</LinearLayout>
+    <!-- Center Button -->
+    <Button
+        android:id="@+id/findRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Room"
+        android:layout_gravity="center" />
+
+</FrameLayout>
