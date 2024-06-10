@@ -39,7 +39,7 @@ public class RechargeActivity extends AppCompatActivity {
 
         // Add recharge options
         rechargeOptions = new ArrayList<>();
-        rechargeOptions.add(new RechargeOption("10k", R.drawable.baseline_home_24, "100 Coins"));
+        rechargeOptions.add(new RechargeOption("10k", R.drawable.gamebg, "100 Coins"));
         rechargeOptions.add(new RechargeOption("20k", R.drawable.baseline_home_24, "200 Coins"));
         rechargeOptions.add(new RechargeOption("50k", R.drawable.baseline_home_24, "500 Coins"));
         rechargeOptions.add(new RechargeOption("100k", R.drawable.baseline_home_24, "1000 Coins"));
