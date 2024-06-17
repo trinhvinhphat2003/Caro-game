@@ -1,26 +1,39 @@
 package com.example.myapplication.model;
 
 public class UserItem {
-    private String name;
-    private String lastMessage;
-    private int profileImage;
+    private String _id;
+    private String fullName;
 
-    public UserItem(String name, String lastMessage, int profileImage) {
-        this.name = name;
-        this.lastMessage = lastMessage;
-        this.profileImage = profileImage;
+    private String profilePic;
+
+    public UserItem(String fullName, String profilePic, String _id) {
+        this._id = _id;
+        this.fullName = fullName;
+        this.profilePic = profilePic;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return _id;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
+    public void setId(String _id) {
+        this._id = _id;
     }
 
-    public int getProfileImage() {
-        return profileImage;
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 }
 

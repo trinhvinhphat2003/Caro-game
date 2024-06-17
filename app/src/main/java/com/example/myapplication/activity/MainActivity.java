@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,16 +12,22 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.example.myapplication.fragment.home.HomeFragment;
 import com.example.myapplication.fragment.message.MessageFragment;
+import com.example.myapplication.socket.SocketManager;
+import com.example.myapplication.tokenManager.TokenManager;
 
 public class MainActivity extends AppCompatActivity {
 //    Button toLogin;
     ActivityMainBinding binding;
+    private SocketManager socketManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
+
+        socketManager = new SocketManager(TokenManager.getId_user());
+        socketManager.connect();
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId =  item.getItemId();
@@ -49,4 +56,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (socketManager != null) {
+            socketManager.disconnect();
+        }
+    }
+
+
 }

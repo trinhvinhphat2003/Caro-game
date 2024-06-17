@@ -29,13 +29,7 @@
             android:textColor="@color/black"
             android:fontFamily="sans-serif-medium"/>
 
-        <TextView
-            android:id="@+id/lastMessageTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Last message"
-            android:textSize="16sp"
-            android:textColor="@color/black"/>
+
     </LinearLayout>
 
 </LinearLayout>

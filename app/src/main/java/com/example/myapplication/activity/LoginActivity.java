@@ -13,6 +13,7 @@ import com.example.myapplication.api.AuthRespository;
 import com.example.myapplication.model.request.LoginRequest;
 import com.example.myapplication.model.response.LoginResponse;
 import com.example.myapplication.services.AuthService;
+import com.example.myapplication.tokenManager.TokenManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button loginButton, toHome, toSignup;
     AuthService authService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                             LoginResponse loginResponse = response.body();
                             if (loginResponse.isOnSuccess()) {
                                 Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                                TokenManager.setToken(loginResponse.getData().getToken());
+                                TokenManager.setId_user(loginResponse.getData().get_id());
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -94,4 +98,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 }
