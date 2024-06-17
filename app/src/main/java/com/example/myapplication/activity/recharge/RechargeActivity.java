@@ -39,14 +39,12 @@ public class RechargeActivity extends AppCompatActivity {
 
         // Add recharge options
         rechargeOptions = new ArrayList<>();
-        rechargeOptions.add(new RechargeOption("10k", R.drawable.gamebg, "100 Coins"));
-        rechargeOptions.add(new RechargeOption("20k", R.drawable.baseline_home_24, "200 Coins"));
-        rechargeOptions.add(new RechargeOption("50k", R.drawable.baseline_home_24, "500 Coins"));
-        rechargeOptions.add(new RechargeOption("100k", R.drawable.baseline_home_24, "1000 Coins"));
-        rechargeOptions.add(new RechargeOption("200k", R.drawable.baseline_home_24, "2000 Coins"));
-        rechargeOptions.add(new RechargeOption("500k", R.drawable.baseline_home_24, "5000 Coins"));
-        rechargeOptions.add(new RechargeOption("1tr", R.drawable.baseline_home_24, "10000 Coins"));
-        rechargeOptions.add(new RechargeOption("2tr", R.drawable.baseline_home_24, "20000 Coins"));
+        rechargeOptions.add(new RechargeOption("10,000 VND", R.drawable.coin_1, "100 coins"));
+        rechargeOptions.add(new RechargeOption("20,000 VND", R.drawable.coin_2, "200 coins"));
+        rechargeOptions.add(new RechargeOption("50,000 VND", R.drawable.coin_3, "500 coins"));
+        rechargeOptions.add(new RechargeOption("100,000 VND", R.drawable.coin_4, "1000 coins"));
+        rechargeOptions.add(new RechargeOption("200,000 VND", R.drawable.coin_5, "2000 coins"));
+        rechargeOptions.add(new RechargeOption("500,000 VND", R.drawable.coin_6, "5000 coins"));
 
         adapter = new RechargeAdapter(rechargeOptions);
         recyclerView.setAdapter(adapter);
