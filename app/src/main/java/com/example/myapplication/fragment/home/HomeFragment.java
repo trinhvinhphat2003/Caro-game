@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import com.example.myapplication.R;
-import com.example.myapplication.activity.GameActivity;
+//import com.example.myapplication.activity.GameActivity;
 import com.example.myapplication.activity.LoginActivity;
 import com.example.myapplication.activity.ProfileActivity;
 import com.example.myapplication.activity.recharge.RechargeActivity;
@@ -83,8 +83,8 @@ public class HomeFragment extends Fragment {
         findRoomButton = view.findViewById(R.id.findRoomButton);
 
         findRoomButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), GameActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), GameActivity.class);
+//            startActivity(intent);
         });
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
