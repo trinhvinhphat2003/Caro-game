@@ -1,10 +1,13 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +16,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.ChatAdapter;
+import com.example.myapplication.api.MessageRepository;
 import com.example.myapplication.model.Message;
+import com.example.myapplication.model.request.MessageRequest;
+import com.example.myapplication.model.response.MessageReponse;
+import com.example.myapplication.services.MessageService;
+import com.example.myapplication.socket.SocketManager;
+import com.example.myapplication.tokenManager.TokenManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.socket.emitter.Emitter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -25,6 +42,12 @@ public class ChatActivity extends AppCompatActivity {
     private Button buttonSendMessage;
     private List<Message> messages;
     private ChatAdapter adapter;
+    private TextView textViewFullName;
+    private Message receivedMessage;
+
+    MessageService messageService;
+    private SocketManager socketManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +62,43 @@ public class ChatActivity extends AppCompatActivity {
                 finish();  // Finish the activity to go back
             }
         });
+
+        messageService = MessageRepository.getMessageService();
+        Intent intent = getIntent();
+        String idReceiver = intent.getStringExtra("idReceiver");
+        String fullName = intent.getStringExtra("fullName");
+        socketManager = new SocketManager(TokenManager.getId_user());
+        socketManager.connect();
+
+        socketManager.getmSocket().on("newMessage", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String message = data.getString("message");
+                    receivedMessage = new Message(message, false);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            messages.add(receivedMessage);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+
         // Initialize views
         recyclerViewMessages = findViewById(R.id.messageRecyclerView);
         editTextMessage = findViewById(R.id.messageInputEditText);
         buttonSendMessage = findViewById(R.id.sendButton);
+        textViewFullName = findViewById(R.id.titleTextView);
+        textViewFullName.setText(idReceiver + " - " + fullName);
 
         // Initialize RecyclerView
         recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
@@ -58,25 +114,65 @@ public class ChatActivity extends AppCompatActivity {
                 if (!messageContent.isEmpty()) {
                     messages.add(new Message(messageContent, true)); // Add message sent by user
                     adapter.notifyDataSetChanged(); // Refresh RecyclerView
+                    MessageRequest messageRequest = new MessageRequest(messageContent);
+                    messageService.sendMessage(idReceiver, "Bearer " + TokenManager.getToken(), messageRequest).enqueue(new Callback<MessageReponse>() {
+                        @Override
+                        public void onResponse(Call<MessageReponse> call, Response<MessageReponse> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<MessageReponse> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
                     editTextMessage.setText(""); // Clear input field
-                    // Here you can implement logic to send the message to the other person
+
+
                 }
+
             }
         });
 
         // Add mock messages
-        addMockMessages();
+        addMockMessages(idReceiver);
     }
 
     // Add mock messages for testing
-    private void addMockMessages() {
-        messages.add(new Message("Hello", false));
-        messages.add(new Message("Hi there!", true));
-        messages.add(new Message("How are you?", false));
-        messages.add(new Message("I'm fine, thank you!", true));
-        messages.add(new Message("What about you?", true));
-        messages.add(new Message("I'm good too", false));
-        messages.add(new Message("That's great!", true));
-        messages.add(new Message("Bye", false));
+    private void addMockMessages(String idReceiver) {
+        try {
+            Call<MessageReponse> call = messageService.getMessages(idReceiver, "Bearer " + TokenManager.getToken());
+
+            call.enqueue(new Callback<MessageReponse>() {
+                @Override
+                public void onResponse(Call<MessageReponse> call, Response<MessageReponse> response) {
+                    if (response.body() != null) {
+                        MessageReponse messageReponse = response.body();
+                        if (messageReponse.isOnSuccess()) {
+                            List<MessageReponse.Message> messageList = messageReponse.getData();
+                            for (MessageReponse.Message message : messageList) {
+                                messages.add(new Message(message.getMessage(), !message.getSenderId().equals(idReceiver)));
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MessageReponse> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (socketManager != null) {
+            socketManager.disconnect();
+        }
     }
 }

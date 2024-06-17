@@ -6,16 +6,26 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.UserAdapter;
+import com.example.myapplication.api.UserRepository;
 import com.example.myapplication.model.UserItem;
+import com.example.myapplication.model.response.UserResponse;
+import com.example.myapplication.services.UserService;
+import com.example.myapplication.tokenManager.TokenManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +42,7 @@ public class MessageFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    UserService userService;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -80,12 +91,48 @@ public class MessageFragment extends Fragment {
         userRecyclerView.setAdapter(userAdapter);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Add sample data
-        userList.add(new UserItem("John Doe", "Hello", R.drawable.anonymous));
-        userList.add(new UserItem("Jane Smith", "Hi there", R.drawable.anonymous));
-        userList.add(new UserItem("Alex Johnson", "Hey!", R.drawable.anonymous));
-        // Add more sample data as needed
+        userService = UserRepository.getUserService();
+
+
+        loadUser();
+
+
 
         return view;
     }
+    private void loadUser(){
+        try {
+            Call<UserResponse> call = userService.getUsers("Bearer " + TokenManager.getToken());
+            call.enqueue(new Callback<UserResponse>() {
+                @Override
+                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                    if (response.body() != null){
+                        UserResponse userResponse = response.body();
+                        if (userResponse.isOnSuccess()) {
+                            userList.clear();
+                            Toast.makeText(getContext(), userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            for (UserItem userItem : userResponse.getData()) {
+                                UserItem user = new UserItem(userItem.getFullName(), userItem.getProfilePic(), userItem.getId());
+                                userList.add(user);
+                            }
+                            userAdapter.notifyDataSetChanged();
+                        }
+                        else {
+                            Toast.makeText(getContext(), userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "Fail to load user", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch ( Exception e){
+
+        }
+
+
+    }
+
 }

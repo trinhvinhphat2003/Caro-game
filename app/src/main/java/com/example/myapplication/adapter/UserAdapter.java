@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.activity.ChatActivity;
 import com.example.myapplication.model.UserItem;
 
@@ -39,19 +40,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         UserItem currentItem = userList.get(position);
-        UserItem userItem = userList.get(position);
-        holder.userNameTextView.setText(userItem.getName());
-        holder.lastMessageTextView.setText(userItem.getLastMessage());
-        holder.profileImageView.setImageResource(userItem.getProfileImage());
+        holder.userNameTextView.setText(currentItem.getFullName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle item click event
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("username", currentItem.getName());
-                context.startActivity(intent);
-            }
+        // Load image using Glide
+        Glide.with(context)
+                .load(currentItem.getProfilePic())
+                .placeholder(R.drawable.anonymous)
+                .error(R.drawable.anonymous)
+                .into(holder.profileImageView);
+
+        holder.itemView.setOnClickListener(v -> {
+            // Handle item click event
+            Intent intent = new Intent(context, ChatActivity.class);
+            intent.putExtra("idReceiver", currentItem.getId());
+            intent.putExtra("fullName", currentItem.getFullName());
+            context.startActivity(intent);
         });
     }
 
@@ -63,13 +66,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         ImageView profileImageView;
         TextView userNameTextView;
-        TextView lastMessageTextView;
+
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             profileImageView = itemView.findViewById(R.id.profileImageView);
             userNameTextView = itemView.findViewById(R.id.userNameTextView);
-            lastMessageTextView = itemView.findViewById(R.id.lastMessageTextView);
         }
     }
 }
