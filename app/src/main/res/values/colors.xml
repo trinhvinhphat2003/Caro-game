@@ -5,4 +5,9 @@
     <color name="header_background">#FF0000</color>
     <color name="menu_background">#FF0000</color> <!-- Thay đổi màu nền menu tùy ý -->
     <color name="colorPrimaryDark">#000000</color>
+
+    <color name="colorGrayText">#C3C4C8</color>
+    <color name="colorBlueDeep">#0072D4</color>
+    <color name="colorBlueLight">#20EFFE</color>
+
 </resources>
