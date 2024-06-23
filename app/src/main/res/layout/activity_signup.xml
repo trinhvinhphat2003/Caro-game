@@ -72,8 +72,6 @@
                     android:hint="Username"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp" />
-
-
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
@@ -92,8 +90,41 @@
                     android:background="@drawable/rounded_edittext_bg"
                     android:hint="Confirm Password"
                     android:inputType="textPassword"
+                    android:layout_marginBottom="16dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp" />
+
+                <EditText
+                    android:id="@+id/fullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:hint="Full Name"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
+
+                <RadioGroup
+                    android:id="@+id/gender_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <RadioButton
+                        android:id="@+id/gender_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="male" />
+
+                    <RadioButton
+                        android:id="@+id/gender_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="female" />
+                </RadioGroup>
+
+
 
                 <Button
                     android:id="@+id/signupButton"
@@ -103,6 +134,7 @@
                     android:backgroundTint="#2196F3"
                     android:text="SIGN UP"
                     android:textColor="@android:color/white" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
