@@ -112,7 +112,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Play PvP"
-            android:textColor="@color/colorBlueLight"
+            android:textColor="@color/white"
             android:textSize="28dp"
             android:textStyle="bold" />
 

@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.myapplication.R;
 import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +51,12 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.game), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         context = this;
         socketManager = SocketManager.getInstance(TokenManager.getId_user());
         socketManager.connect();
@@ -64,8 +72,8 @@ public class GameActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         loadResources();
+        setPlayerView();
         initGame();
 
         setupListeners();
@@ -76,6 +84,43 @@ public class GameActivity extends AppCompatActivity {
         drawableCell[1] = context.getDrawable(R.drawable.fire);//player 1
         drawableCell[2] = context.getDrawable(R.drawable.droplet);//player 2
         drawableCell[3] = context.getDrawable(R.drawable.cell_bg);//background
+    }
+
+    private void setPlayerView() {
+        TextView playerName;
+        TextView playerWallet;
+        ImageView playerAvatar;
+        ImageView playerSymbol;
+        TextView playerTurnText;
+
+        playerName = findViewById(R.id.playerName);
+        playerWallet = findViewById(R.id.playerWallet);
+        playerAvatar = findViewById(R.id.playerAvatar);
+        playerSymbol = findViewById(R.id.playerSymbol);
+        playerTurnText = findViewById(R.id.playerTurnText);
+        JSONObject currentUserData;
+
+        try {
+            String turn = room.getString("turn");
+            JSONObject playerX = room.getJSONObject("playerX");
+            JSONObject playerY = room.getJSONObject("playerO");
+
+            currentUserData = turn.equals(playerX.getString("_id")) ? playerX : playerY;
+            playerName.setText(currentUserData.getString("fullName"));
+            String imageUrl = currentUserData.getString("profilePic");
+            Picasso.get().load(imageUrl).into(playerAvatar);
+
+            String currentplayerSymbol = turn.equals(playerX.getString("_id")) ? "X" : "O";
+            playerSymbol.setImageDrawable(drawableCell[convertSymbolToIndex(currentplayerSymbol)]);
+            playerTurnText.setText(
+                    currentUserData.getString("_id").equals(TokenManager.getId_user())
+                            ? "Your turn"
+                            : "Opponent's turn"
+            );
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     private void initGame() {
         int sizeOfCell = Math.round(calculateScreenWidth()/boardSize);
@@ -148,6 +193,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Emitter.Listener onMove = args -> {
         JSONObject data = (JSONObject) args[0];
+        room = data;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -156,7 +202,7 @@ public class GameActivity extends AppCompatActivity {
                     JSONObject playerX = data.getJSONObject("playerX");
                     currentTurnUser = data.getString("turn");
                     playerTurn = playerX.getString("_id").equals(TokenManager.getId_user()) ? "X" : "O";
-
+                    setPlayerView();
                     for (int x = 0; x < gameArray.length(); x++) {
                         JSONArray rowArray = gameArray.getJSONArray(x);
                         for (int y = 0; y < rowArray.length(); y++) {

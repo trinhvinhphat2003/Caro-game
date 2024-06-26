@@ -40,7 +40,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Select room"
                 android:textSize="28sp"
-                android:textColor="@color/colorBlueDeep"/>
+                android:textColor="@color/black"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
