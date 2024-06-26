@@ -2,9 +2,9 @@ package com.example.myapplication.model;
 
 public class RoomOption {
     private int imageResId;
-    private String coins;
+    private int coins;
 
-    public RoomOption(int imageResId, String coins) {
+    public RoomOption(int imageResId, int coins) {
         this.imageResId = imageResId;
         this.coins = coins;
     }
@@ -13,7 +13,7 @@ public class RoomOption {
         return imageResId;
     }
 
-    public String getCoins() {
+    public int getCoins() {
         return coins;
     }
 }

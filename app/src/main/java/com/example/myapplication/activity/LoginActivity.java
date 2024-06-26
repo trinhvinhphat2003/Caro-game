@@ -15,6 +15,11 @@ import com.example.myapplication.model.response.LoginResponse;
 import com.example.myapplication.services.AuthService;
 import com.example.myapplication.tokenManager.TokenManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,6 +82,17 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
                                 TokenManager.setToken(loginResponse.getData().getToken());
                                 TokenManager.setId_user(loginResponse.getData().get_id());
+                                JSONObject userObject = new JSONObject();
+                                try {
+                                    userObject.put("_id", loginResponse.getData().get_id());
+                                    userObject.put("fullName", loginResponse.getData().getFullName());
+                                    userObject.put("profilePic", loginResponse.getData().getProfilePic());
+                                    userObject.put("token", loginResponse.getData().getToken());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                TokenManager.setUserObject(userObject);
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();

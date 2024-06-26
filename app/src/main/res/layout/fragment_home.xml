@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +9,9 @@
 
     <!-- TODO: Update blank fragment layout -->
     <!-- Header Layout -->
+
+    <!-- Center Button -->
+
     <ImageView
         android:id="@+id/backGround"
         android:layout_width="match_parent"
@@ -15,7 +19,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/gamebg" />
 
-    <!-- Center Button -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -84,11 +87,35 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
+
+    <LinearLayout
         android:id="@+id/findRoomButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="230dp"
+        android:layout_height="72dp"
         android:layout_gravity="center"
-        android:text="Play Online" />
+        android:background="@drawable/room_bg"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/vs" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Play PvP"
+            android:textColor="@color/colorBlueLight"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.GameActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RoomSelectionActivity"
             android:exported="false" />
         <activity

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import com.example.myapplication.R;
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Button findRoomButton;
+    private LinearLayout findRoomButton;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -170,14 +171,14 @@ public class HomeFragment extends Fragment {
 
 
         roomOptions = new ArrayList<>();
-        roomOptions.add(new RoomOption(R.drawable.coin_1, "100 coins"));
-        roomOptions.add(new RoomOption(R.drawable.coin_2, "200 coins"));
-        roomOptions.add(new RoomOption(R.drawable.coin_3, "500 coins"));
-        roomOptions.add(new RoomOption(R.drawable.coin_4, "1000 coins"));
-        roomOptions.add(new RoomOption(R.drawable.coin_5, "2000 coins"));
-        roomOptions.add(new RoomOption(R.drawable.coin_6, "5000 coins"));
+        roomOptions.add(new RoomOption(R.drawable.coin_1, 100));
+        roomOptions.add(new RoomOption(R.drawable.coin_2, 200));
+        roomOptions.add(new RoomOption(R.drawable.coin_3, 500));
+        roomOptions.add(new RoomOption(R.drawable.coin_4, 1000));
+        roomOptions.add(new RoomOption(R.drawable.coin_5, 2000));
+        roomOptions.add(new RoomOption(R.drawable.coin_6, 5000));
 
-        adapter = new RoomSelectionAdapter(roomOptions);
+        adapter = new RoomSelectionAdapter(roomOptions, dialog.getContext());
         recyclerView.setAdapter(adapter);
 
         dialog.show();
