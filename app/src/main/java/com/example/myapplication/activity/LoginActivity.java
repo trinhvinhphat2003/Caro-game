@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                     userObject.put("fullName", loginResponse.getData().getFullName());
                                     userObject.put("profilePic", loginResponse.getData().getProfilePic());
                                     userObject.put("token", loginResponse.getData().getToken());
+                                    userObject.put("wallet", loginResponse.getData().getWallet());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

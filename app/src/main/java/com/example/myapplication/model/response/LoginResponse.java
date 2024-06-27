@@ -12,6 +12,7 @@ public class LoginResponse {
         private String fullName;
         private String profilePic;
         private String token;
+        private String wallet;
 
         public String get_id() {
             return _id;
@@ -43,6 +44,14 @@ public class LoginResponse {
 
         public void setToken(String token) {
             this.token = token;
+        }
+
+        public String getWallet() {
+            return wallet;
+        }
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
         }
     }
 

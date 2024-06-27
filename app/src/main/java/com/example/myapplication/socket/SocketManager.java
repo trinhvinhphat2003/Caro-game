@@ -50,5 +50,6 @@ public class SocketManager {
             mSocket.disconnect();
             mSocket = null;
         }
+        instance = null;
     }
 }

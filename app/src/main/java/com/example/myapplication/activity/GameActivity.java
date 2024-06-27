@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -42,6 +43,8 @@ public class GameActivity extends AppCompatActivity {
     private JSONObject room;
     private String playerTurn = "";
     private String currentTurnUser;
+    private String gameStatus = "created";
+    private int gamePrice;
 
     public SocketManager socketManager;
 
@@ -60,7 +63,7 @@ public class GameActivity extends AppCompatActivity {
         context = this;
         socketManager = SocketManager.getInstance(TokenManager.getId_user());
         socketManager.connect();
-
+        gameStatus = "ready";
         Intent intent = getIntent();
         String roomString = intent.getStringExtra("room");
         try {
@@ -101,22 +104,29 @@ public class GameActivity extends AppCompatActivity {
         JSONObject currentUserData;
 
         try {
+            gamePrice = room.getInt("gamePrice");
+
             String turn = room.getString("turn");
+
             JSONObject playerX = room.getJSONObject("playerX");
             JSONObject playerY = room.getJSONObject("playerO");
-
             currentUserData = turn.equals(playerX.getString("_id")) ? playerX : playerY;
+
             playerName.setText(currentUserData.getString("fullName"));
+
             String imageUrl = currentUserData.getString("profilePic");
             Picasso.get().load(imageUrl).into(playerAvatar);
 
             String currentplayerSymbol = turn.equals(playerX.getString("_id")) ? "X" : "O";
             playerSymbol.setImageDrawable(drawableCell[convertSymbolToIndex(currentplayerSymbol)]);
+
             playerTurnText.setText(
                     currentUserData.getString("_id").equals(TokenManager.getId_user())
                             ? "Your turn"
                             : "Opponent's turn"
             );
+
+            playerWallet.setText(currentUserData.getString("wallet") + " coins");
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -156,7 +166,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void makeMove(int x, int y) {
-        Log.d("Make move at: ", boardValue[x][y]);
+        if(gameStatus.equals("finish")){
+            return;
+        }
         if(!boardValue[x][y].isEmpty()){
             return;
         }
@@ -165,7 +177,7 @@ public class GameActivity extends AppCompatActivity {
         }
         JSONObject data = new JSONObject();
         try {
-            JSONObject user = TokenManager.getUserObject();
+            String user = TokenManager.getId_user();
             data.put("user", user).put("row", x).put("col", y);
         } catch (JSONException e){
             throw new RuntimeException(e);
@@ -189,6 +201,7 @@ public class GameActivity extends AppCompatActivity {
     public void setupListeners() {
         Socket mSocket = socketManager.getmSocket();
         mSocket.on("move", onMove);
+        mSocket.on("finish-game", onFinishGame);
     }
 
     private Emitter.Listener onMove = args -> {
@@ -222,4 +235,47 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     };
+
+    private Emitter.Listener onFinishGame = args -> {
+        JSONObject data = (JSONObject) args[0];
+        TextView playerTurnText;
+        playerTurnText = findViewById(R.id.playerTurnText);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                gameStatus = "finish";
+                try {
+//                    JSONObject winner = data.getJSONObject("winner");
+                    String winnerId = data.getString("winner");
+                    Boolean isWinner = winnerId.equals(TokenManager.getId_user());
+                    playerTurnText.setText(
+                            (isWinner ? "You win" : "You lose")
+                            + " ("
+                            + (isWinner ? "+" : "-")
+                            + gamePrice + " coins"
+                            + ")"
+                    );
+
+//                    playerName.setText(winner.getString("fullName"));
+//                    playerWallet.setText(winner.getString("wallet") + " coins");
+//
+//                    String imageUrl = winner.getString("profilePic");
+//                    Picasso.get().load(imageUrl).into(playerAvatar);
+
+                    Toast.makeText(context,
+                            (isWinner ? "You get" : "You lose") + " " + gamePrice + " coins",
+                            Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    };
+
+    protected void onDestroy() {
+        super.onDestroy();
+        if (socketManager != null) {
+            socketManager.disconnect();
+        }
+    }
 }

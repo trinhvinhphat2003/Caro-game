@@ -91,15 +91,15 @@
     <LinearLayout
         android:id="@+id/findRoomButton"
         android:layout_width="230dp"
-        android:layout_height="72dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:background="@drawable/room_bg"
         android:orientation="horizontal"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp">
+        android:paddingVertical="10dp">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/pvpIcon"
             android:layout_width="175dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

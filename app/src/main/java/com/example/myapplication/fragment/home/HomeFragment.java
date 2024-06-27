@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
         });
 
         RecyclerView recyclerView;
-        RoomSelectionAdapter adapter;
+            RoomSelectionAdapter adapter;
         List<RoomOption> roomOptions;
 
         recyclerView = dialog.findViewById(R.id.recyclerView);
@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment {
         roomOptions.add(new RoomOption(R.drawable.coin_5, 2000));
         roomOptions.add(new RoomOption(R.drawable.coin_6, 5000));
 
-        adapter = new RoomSelectionAdapter(roomOptions, dialog.getContext());
+        adapter = new RoomSelectionAdapter(roomOptions, dialog);
         recyclerView.setAdapter(adapter);
 
         dialog.show();

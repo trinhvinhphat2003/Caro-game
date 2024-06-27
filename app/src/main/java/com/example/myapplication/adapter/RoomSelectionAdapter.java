@@ -1,6 +1,7 @@
 package com.example.myapplication.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -16,13 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.activity.ChatActivity;
 import com.example.myapplication.activity.GameActivity;
-import com.example.myapplication.activity.LoginActivity;
 import com.example.myapplication.activity.MainActivity;
-import com.example.myapplication.model.Message;
+import com.example.myapplication.activity.WaitingActivity;
 import com.example.myapplication.model.RoomOption;
-import com.example.myapplication.model.UserItem;
 import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
 
@@ -38,7 +36,18 @@ import io.socket.emitter.Emitter;
 public class RoomSelectionAdapter extends RecyclerView.Adapter<RoomSelectionAdapter.ViewHolder> {
     private List<RoomOption> roomOptions;
     private Context context;
+    private Dialog dialog;
     public SocketManager socketManager;
+    public RoomSelectionAdapter(List<RoomOption> roomOptions, Dialog dialog) {
+        this.context = dialog.getContext();
+        this.dialog = dialog;
+        this.roomOptions = roomOptions;
+        socketManager = SocketManager.getInstance(TokenManager.getId_user());
+        socketManager.connect();
+
+        setupListeners();
+    }
+
     public RoomSelectionAdapter(List<RoomOption> roomOptions, Context context) {
         this.context = context;
         this.roomOptions = roomOptions;
@@ -106,12 +115,19 @@ public class RoomSelectionAdapter extends RecyclerView.Adapter<RoomSelectionAdap
         JSONObject data = (JSONObject) args[0];
         Intent intent = new Intent(context, GameActivity.class);
         intent.putExtra("room", data.toString());
+        dialog.dismiss();
         context.startActivity(intent);
+
         showToast("Join room successfully");
     };
 
     private Emitter.Listener onWaitingPlay = args -> {
+        JSONObject data = (JSONObject) args[0];
         showToast("Waiting Play");
+        Intent intent = new Intent(context, WaitingActivity.class);
+//        intent.putExtra("room", data.toString());
+        dialog.dismiss();
+        context.startActivity(intent);
     };
 
     private Emitter.Listener onEmelyScare = args -> {
