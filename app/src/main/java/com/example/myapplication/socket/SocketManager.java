@@ -16,6 +16,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class SocketManager {
+    private static SocketManager instance;
     private Socket mSocket;
     private static final String SOCKET_URL = "http://10.0.2.2:8000";
     private SocketCallback callback;
@@ -29,7 +30,12 @@ public class SocketManager {
         }
     }
 
-
+    public static synchronized SocketManager getInstance(String userId) {
+        if (instance == null) {
+            instance = new SocketManager(userId);
+        }
+        return instance;
+    }
     public void connect() {
         mSocket.connect();
 
@@ -44,5 +50,6 @@ public class SocketManager {
             mSocket.disconnect();
             mSocket = null;
         }
+        instance = null;
     }
 }

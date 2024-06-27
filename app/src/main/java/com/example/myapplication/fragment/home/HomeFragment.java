@@ -1,9 +1,14 @@
 package com.example.myapplication.fragment.home;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -12,14 +17,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import com.example.myapplication.R;
 //import com.example.myapplication.activity.GameActivity;
 import com.example.myapplication.activity.LoginActivity;
 import com.example.myapplication.activity.ProfileActivity;
+import com.example.myapplication.activity.recharge.ItemOffsetDecoration;
 import com.example.myapplication.activity.recharge.RechargeActivity;
-import com.example.myapplication.fragment.message.MessageFragment;
+import com.example.myapplication.adapter.RechargeAdapter;
+import com.example.myapplication.adapter.RoomSelectionAdapter;
+import com.example.myapplication.model.RechargeOption;
+import com.example.myapplication.model.RoomOption;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +50,7 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Button findRoomButton;
+    private LinearLayout findRoomButton;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -77,14 +90,14 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        Context context = getContext();
 
         rechargeIcon = view.findViewById(R.id.rechargeIcon);
         avatar = view.findViewById(R.id.avatar);
         findRoomButton = view.findViewById(R.id.findRoomButton);
 
         findRoomButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(getActivity(), GameActivity.class);
-//            startActivity(intent);
+            showDialog(context);
         });
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,4 +144,83 @@ public class HomeFragment extends Fragment {
         startActivity(intent);
         getActivity().finish();
     }
+
+
+    private void showDialog(Context context){
+        Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        dialog.setContentView(R.layout.dialog_room_selection);
+
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+
+        ImageView btnClose = dialog.findViewById(R.id.btn_close);
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        RecyclerView recyclerView;
+            RoomSelectionAdapter adapter;
+        List<RoomOption> roomOptions;
+
+        recyclerView = dialog.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 1));
+        recyclerView.addItemDecoration(new ItemOffsetDecoration(16));
+
+
+        roomOptions = new ArrayList<>();
+        roomOptions.add(new RoomOption(R.drawable.coin_1, 100));
+        roomOptions.add(new RoomOption(R.drawable.coin_2, 200));
+        roomOptions.add(new RoomOption(R.drawable.coin_3, 500));
+        roomOptions.add(new RoomOption(R.drawable.coin_4, 1000));
+        roomOptions.add(new RoomOption(R.drawable.coin_5, 2000));
+        roomOptions.add(new RoomOption(R.drawable.coin_6, 5000));
+
+        adapter = new RoomSelectionAdapter(roomOptions, dialog);
+        recyclerView.setAdapter(adapter);
+
+        dialog.show();
+    }
+
+
+//    private void showDialog(Context context){
+//        Dialog dialog = new Dialog(context, R.style.DialogStyle);
+//        dialog.setContentView(R.layout.dialog_room_selection);
+//
+//        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
+//
+//        ImageView btnClose = dialog.findViewById(R.id.btn_close);
+//
+//        btnClose.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        RecyclerView recyclerView;
+//        RechargeAdapter adapter;
+//        List<RechargeOption> rechargeOptions;
+//
+//        recyclerView = dialog.findViewById(R.id.recyclerView);
+//        recyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 2));
+//        recyclerView.addItemDecoration(new ItemOffsetDecoration(16));
+//
+//
+//        // Add recharge options
+//        rechargeOptions = new ArrayList<>();
+//        rechargeOptions.add(new RechargeOption("10,000 VND", R.drawable.coin_1, "100 coins"));
+//        rechargeOptions.add(new RechargeOption("20,000 VND", R.drawable.coin_2, "200 coins"));
+//        rechargeOptions.add(new RechargeOption("50,000 VND", R.drawable.coin_3, "500 coins"));
+//        rechargeOptions.add(new RechargeOption("100,000 VND", R.drawable.coin_4, "1000 coins"));
+//        rechargeOptions.add(new RechargeOption("200,000 VND", R.drawable.coin_5, "2000 coins"));
+//        rechargeOptions.add(new RechargeOption("500,000 VND", R.drawable.coin_6, "5000 coins"));
+//
+//        adapter = new RechargeAdapter(rechargeOptions);
+//        recyclerView.setAdapter(adapter);
+//
+//        dialog.show();
+//    }
 }

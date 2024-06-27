@@ -74,6 +74,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/rounded_edittext_bg"
                     android:hint="Username"
+                    android:text="mumu"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp" />
 
@@ -83,6 +84,7 @@
                     android:layout_height="50dp"
                     android:background="@drawable/rounded_edittext_bg"
                     android:hint="Password"
+                    android:text="mumu"
                     android:inputType="textPassword"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp" />
