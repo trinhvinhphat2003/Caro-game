@@ -67,7 +67,7 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String idReceiver = intent.getStringExtra("idReceiver");
         String fullName = intent.getStringExtra("fullName");
-        socketManager = new SocketManager(TokenManager.getId_user());
+        socketManager = SocketManager.getInstance(TokenManager.getId_user());
         socketManager.connect();
 
         socketManager.getmSocket().on("newMessage", new Emitter.Listener() {
@@ -168,11 +168,6 @@ public class ChatActivity extends AppCompatActivity {
         }
 
     }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (socketManager != null) {
-            socketManager.disconnect();
-        }
-    }
+
+
 }
