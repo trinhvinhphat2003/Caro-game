@@ -110,7 +110,7 @@ public class MessageFragment extends Fragment {
                         UserResponse userResponse = response.body();
                         if (userResponse.isOnSuccess()) {
                             userList.clear();
-                            Toast.makeText(getContext(), userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                             for (UserItem userItem : userResponse.getData()) {
                                 UserItem user = new UserItem(userItem.getFullName(), userItem.getProfilePic(), userItem.getId());
                                 userList.add(user);
