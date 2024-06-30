@@ -1,5 +1,6 @@
 package com.example.myapplication.activity.recharge;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
@@ -25,13 +26,19 @@ public class RechargeActivity extends AppCompatActivity {
 
     private ImageButton backButton;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_recharge);
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.recharge), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this,   2));
         recyclerView.addItemDecoration(new ItemOffsetDecoration(16));
 
         backButton = findViewById(R.id.backButton);
@@ -39,12 +46,12 @@ public class RechargeActivity extends AppCompatActivity {
 
         // Add recharge options
         rechargeOptions = new ArrayList<>();
-        rechargeOptions.add(new RechargeOption("10,000 VND", R.drawable.coin_1, "100 coins"));
-        rechargeOptions.add(new RechargeOption("20,000 VND", R.drawable.coin_2, "200 coins"));
-        rechargeOptions.add(new RechargeOption("50,000 VND", R.drawable.coin_3, "500 coins"));
-        rechargeOptions.add(new RechargeOption("100,000 VND", R.drawable.coin_4, "1000 coins"));
-        rechargeOptions.add(new RechargeOption("200,000 VND", R.drawable.coin_5, "2000 coins"));
-        rechargeOptions.add(new RechargeOption("500,000 VND", R.drawable.coin_6, "5000 coins"));
+        rechargeOptions.add(new RechargeOption(10000, R.drawable.coin_1, 100));
+        rechargeOptions.add(new RechargeOption(20000, R.drawable.coin_2, 220));
+        rechargeOptions.add(new RechargeOption(50000, R.drawable.coin_3, 580));
+        rechargeOptions.add(new RechargeOption(100000, R.drawable.coin_4, 1250));
+        rechargeOptions.add(new RechargeOption(200000, R.drawable.coin_5, 2500));
+        rechargeOptions.add(new RechargeOption(500000, R.drawable.coin_6, 8000));
 
         adapter = new RechargeAdapter(rechargeOptions);
         recyclerView.setAdapter(adapter);

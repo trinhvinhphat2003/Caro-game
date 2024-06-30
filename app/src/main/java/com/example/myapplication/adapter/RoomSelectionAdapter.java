@@ -97,7 +97,7 @@ public class RoomSelectionAdapter extends RecyclerView.Adapter<RoomSelectionAdap
     private void joinRoom(int money) throws JSONException {
         JSONObject data = new JSONObject();
         JSONObject user = TokenManager.getUserObject();
-        data.put("user", user); // Replace with actual user data
+        data.put("user", user);
         data.put("money", money);
         Toast.makeText(context, "Joining...", Toast.LENGTH_SHORT).show();
         socketManager.getmSocket().emit("joinroom", data);
