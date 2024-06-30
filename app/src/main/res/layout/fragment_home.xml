@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="923dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/gamebg" />
+        android:src="@drawable/home_bg" />
 
     <LinearLayout
         android:id="@+id/headerLayout"
@@ -32,7 +32,7 @@
         <ImageView
             android:id="@+id/avatar"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/anonymous"
             android:contentDescription="gello"
@@ -90,6 +90,7 @@
 
     <LinearLayout
         android:id="@+id/findRoomButton"
+        android:layout_marginBottom="60dp"
         android:layout_width="230dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
@@ -112,6 +113,37 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Play PvP"
+            android:textColor="@color/white"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/playWithBotButton"
+        android:layout_marginTop="50dp"
+        android:layout_width="230dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:background="@drawable/room_bg"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp">
+
+        <ImageView
+            android:id="@+id/pveIcon"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/bot" />
+
+        <TextView
+            android:id="@+id/botText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Play PvE"
             android:textColor="@color/white"
             android:textSize="28dp"
             android:textStyle="bold" />

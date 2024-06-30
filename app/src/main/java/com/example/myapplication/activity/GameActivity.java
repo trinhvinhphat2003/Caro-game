@@ -30,6 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -38,13 +41,13 @@ public class GameActivity extends AppCompatActivity {
     final static int boardSize = 12;
     private ImageView[][] boardView = new ImageView[boardSize][boardSize];
     private String[][] boardValue = new String[boardSize][boardSize];
-    private Drawable[] drawableCell = new Drawable[4]; //0: empty,1: player 1, 2: player 2, 3: background
+    private Drawable[] drawableCell = new Drawable[6]; //0: empty,1: player 1, 2: player 2, 3: background
 
     private JSONObject room;
     private String playerTurn = "";
     private String currentTurnUser;
     private String gameStatus = "created";
-    private int gamePrice;
+    private int gamePrice = 0;
 
     public SocketManager socketManager;
 
@@ -78,6 +81,7 @@ public class GameActivity extends AppCompatActivity {
         loadResources();
         setPlayerView();
         initGame();
+        createLeavingRoom();
 
         setupListeners();
     }
@@ -87,6 +91,8 @@ public class GameActivity extends AppCompatActivity {
         drawableCell[1] = context.getDrawable(R.drawable.fire);//player 1
         drawableCell[2] = context.getDrawable(R.drawable.droplet);//player 2
         drawableCell[3] = context.getDrawable(R.drawable.cell_bg);//background
+        drawableCell[4] = context.getDrawable(R.drawable.red_cell_bg);//winning X background
+        drawableCell[5] = context.getDrawable(R.drawable.blue_cell_bg);//winning O background
     }
 
     private void setPlayerView() {
@@ -245,7 +251,6 @@ public class GameActivity extends AppCompatActivity {
             public void run() {
                 gameStatus = "finish";
                 try {
-//                    JSONObject winner = data.getJSONObject("winner");
                     String winnerId = data.getString("winner");
                     Boolean isWinner = winnerId.equals(TokenManager.getId_user());
                     playerTurnText.setText(
@@ -255,6 +260,16 @@ public class GameActivity extends AppCompatActivity {
                             + gamePrice + " coins"
                             + ")"
                     );
+
+                    JSONArray winningCells = data.getJSONObject("result").getJSONArray("cells");
+                    String winningMark = data.getJSONObject("result").getString("mark");
+
+                    for (int i = 0; i < winningCells.length(); i++) {
+                        JSONArray winningCell = winningCells.getJSONArray(i);
+                        int x = winningCell.getInt(0);
+                        int y = winningCell.getInt(1);
+                        boardView[x][y].setBackground(winningMark.equals("X") ? drawableCell[4] : drawableCell[5]);
+                    }
 
 //                    playerName.setText(winner.getString("fullName"));
 //                    playerWallet.setText(winner.getString("wallet") + " coins");
@@ -271,6 +286,18 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     };
+
+    private void createLeavingRoom() {
+        LinearLayout leaveRoomButton = findViewById(R.id.leaveRoomButton);
+        leaveRoomButton.setOnClickListener(v -> {
+            socketManager.getmSocket().disconnect();
+            Intent intent = new Intent(this ,MainActivity.class);
+            startActivity(intent);
+            startActivity(intent);
+            finish();
+        });
+
+    }
 
     protected void onDestroy() {
         super.onDestroy();

@@ -19,9 +19,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
 //import com.example.myapplication.activity.GameActivity;
+import com.example.myapplication.activity.GameActivity;
 import com.example.myapplication.activity.LoginActivity;
 import com.example.myapplication.activity.ProfileActivity;
 import com.example.myapplication.activity.recharge.ItemOffsetDecoration;
@@ -30,9 +32,17 @@ import com.example.myapplication.adapter.RechargeAdapter;
 import com.example.myapplication.adapter.RoomSelectionAdapter;
 import com.example.myapplication.model.RechargeOption;
 import com.example.myapplication.model.RoomOption;
+import com.example.myapplication.socket.SocketManager;
+import com.example.myapplication.tokenManager.TokenManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +61,8 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private LinearLayout findRoomButton;
+    private LinearLayout playWithBotButton;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -95,9 +107,14 @@ public class HomeFragment extends Fragment {
         rechargeIcon = view.findViewById(R.id.rechargeIcon);
         avatar = view.findViewById(R.id.avatar);
         findRoomButton = view.findViewById(R.id.findRoomButton);
+        playWithBotButton = view.findViewById(R.id.playWithBotButton);
 
         findRoomButton.setOnClickListener(v -> {
             showDialog(context);
+        });
+
+        playWithBotButton.setOnClickListener(v -> {
+            playWithBot(context);
         });
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,43 +201,30 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
+    private void playWithBot(Context context){
+        SocketManager socketManager = SocketManager.getInstance(TokenManager.getId_user());
+        try {
+            JSONObject data = new JSONObject();
+            JSONObject user = TokenManager.getUserObject();
+            data.put("user", user);
+            Toast.makeText(context, "Joining...", Toast.LENGTH_SHORT).show();
+            socketManager.getmSocket().emit("joinroom-ai", data);
+            socketManager.connect();
 
-//    private void showDialog(Context context){
-//        Dialog dialog = new Dialog(context, R.style.DialogStyle);
-//        dialog.setContentView(R.layout.dialog_room_selection);
-//
-//        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_window);
-//
-//        ImageView btnClose = dialog.findViewById(R.id.btn_close);
-//
-//        btnClose.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        RecyclerView recyclerView;
-//        RechargeAdapter adapter;
-//        List<RechargeOption> rechargeOptions;
-//
-//        recyclerView = dialog.findViewById(R.id.recyclerView);
-//        recyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 2));
-//        recyclerView.addItemDecoration(new ItemOffsetDecoration(16));
-//
-//
-//        // Add recharge options
-//        rechargeOptions = new ArrayList<>();
-//        rechargeOptions.add(new RechargeOption("10,000 VND", R.drawable.coin_1, "100 coins"));
-//        rechargeOptions.add(new RechargeOption("20,000 VND", R.drawable.coin_2, "200 coins"));
-//        rechargeOptions.add(new RechargeOption("50,000 VND", R.drawable.coin_3, "500 coins"));
-//        rechargeOptions.add(new RechargeOption("100,000 VND", R.drawable.coin_4, "1000 coins"));
-//        rechargeOptions.add(new RechargeOption("200,000 VND", R.drawable.coin_5, "2000 coins"));
-//        rechargeOptions.add(new RechargeOption("500,000 VND", R.drawable.coin_6, "5000 coins"));
-//
-//        adapter = new RechargeAdapter(rechargeOptions);
-//        recyclerView.setAdapter(adapter);
-//
-//        dialog.show();
-//    }
+
+            Emitter.Listener onJoinRoomSuccess = args -> {
+                JSONObject response = (JSONObject) args[0];
+                Intent intent = new Intent(context, GameActivity.class);
+                intent.putExtra("room", response.toString());
+                context.startActivity(intent);
+//                Toast.makeText(context, "Joining...", Toast.LENGTH_SHORT).show();
+            };
+
+            socketManager.getmSocket().on("joinroom-success", onJoinRoomSuccess);
+            
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
