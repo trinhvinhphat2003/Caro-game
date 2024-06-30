@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
@@ -62,6 +63,8 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout findRoomButton;
     private LinearLayout playWithBotButton;
+    private TextView coinDisplay;
+    private JSONObject user = TokenManager.getUserObject();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -108,6 +111,14 @@ public class HomeFragment extends Fragment {
         avatar = view.findViewById(R.id.avatar);
         findRoomButton = view.findViewById(R.id.findRoomButton);
         playWithBotButton = view.findViewById(R.id.playWithBotButton);
+        coinDisplay = view.findViewById(R.id.coinDisplay);
+        StringBuilder coinDisplayTxt = new StringBuilder("Coins: ");
+        try {
+            coinDisplayTxt.append(String.valueOf(user.get("wallet")));
+        } catch (JSONException e) {
+            //throw new RuntimeException(e);
+        }
+        coinDisplay.setText(coinDisplayTxt);
 
         findRoomButton.setOnClickListener(v -> {
             showDialog(context);
@@ -129,6 +140,18 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        StringBuilder coinDisplayTxt = new StringBuilder("Coins: ");
+        try {
+            coinDisplayTxt.append(String.valueOf(user.get("wallet")));
+        } catch (JSONException e) {
+            //throw new RuntimeException(e);
+        }
+        coinDisplay.setText(coinDisplayTxt);
     }
 
     private void showPopupMenu(View view) {
