@@ -1,25 +1,37 @@
 package com.example.myapplication.model;
 
 public class RechargeOption {
-    private String price;
+    private int price;
     private int imageResId;
-    private String coins;
+    private int coins;
 
-    public RechargeOption(String price, int imageResId, String coins) {
+    public RechargeOption(int price, int imageResId, int coins) {
         this.price = price;
         this.imageResId = imageResId;
         this.coins = coins;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public int getImageResId() {
         return imageResId;
     }
 
-    public String getCoins() {
+    public void setImageResId(int imageResId) {
+        this.imageResId = imageResId;
+    }
+
+    public int getCoins() {
         return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 }

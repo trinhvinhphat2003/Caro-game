@@ -221,7 +221,7 @@ public class HomeFragment extends Fragment {
             };
 
             socketManager.getmSocket().on("joinroom-success", onJoinRoomSuccess);
-            
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
