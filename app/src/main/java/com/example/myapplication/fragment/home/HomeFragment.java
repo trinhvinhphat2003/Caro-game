@@ -35,6 +35,7 @@ import com.example.myapplication.model.RechargeOption;
 import com.example.myapplication.model.RoomOption;
 import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,6 +100,7 @@ public class HomeFragment extends Fragment {
 
     private ImageView rechargeIcon;
     private ImageView avatar;
+    private TextView playerName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,11 +111,17 @@ public class HomeFragment extends Fragment {
 
         rechargeIcon = view.findViewById(R.id.rechargeIcon);
         avatar = view.findViewById(R.id.avatar);
+        playerName = view.findViewById(R.id.playerName);
         findRoomButton = view.findViewById(R.id.findRoomButton);
         playWithBotButton = view.findViewById(R.id.playWithBotButton);
         coinDisplay = view.findViewById(R.id.coinDisplay);
         StringBuilder coinDisplayTxt = new StringBuilder("Coins: ");
         try {
+            playerName.setText(user.getString("fullName"));
+
+            String imageUrl = user.getString("profilePic");
+            Picasso.get().load(imageUrl).into(avatar);
+
             coinDisplayTxt.append(String.valueOf(user.get("wallet")));
         } catch (JSONException e) {
             //throw new RuntimeException(e);
@@ -240,7 +248,6 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(context, GameActivity.class);
                 intent.putExtra("room", response.toString());
                 context.startActivity(intent);
-//                Toast.makeText(context, "Joining...", Toast.LENGTH_SHORT).show();
             };
 
             socketManager.getmSocket().on("joinroom-success", onJoinRoomSuccess);

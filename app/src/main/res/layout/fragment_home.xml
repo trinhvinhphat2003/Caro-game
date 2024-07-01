@@ -12,6 +12,7 @@
 
     <!-- Center Button -->
 
+
     <ImageView
         android:id="@+id/backGround"
         android:layout_width="match_parent"
@@ -31,8 +32,8 @@
         <!-- Avatar Image -->
         <ImageView
             android:id="@+id/avatar"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/anonymous"
             android:contentDescription="gello"
@@ -54,14 +55,14 @@
                 android:layout_height="wrap_content"
                 android:text="Player Name"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textStyle="bold"
+                android:textSize="22sp" />
         </LinearLayout>
 
         <!-- Coin Display Box -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/coin_box_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -86,7 +87,6 @@
                 android:src="@drawable/ic_add" />
         </LinearLayout>
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/findRoomButton"
