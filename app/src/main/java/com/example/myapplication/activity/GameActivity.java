@@ -253,6 +253,12 @@ public class GameActivity extends AppCompatActivity {
                 try {
                     String winnerId = data.getString("winner");
                     Boolean isWinner = winnerId.equals(TokenManager.getId_user());
+
+                    JSONObject user = TokenManager.getUserObject();
+                    user.put("wallet", String.valueOf(Integer.valueOf((String)user.get("wallet")).intValue()
+                            + (isWinner ? gamePrice: -gamePrice))
+                    );
+
                     playerTurnText.setText(
                             (isWinner ? "You win" : "You lose")
                             + " ("
