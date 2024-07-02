@@ -2,4 +2,5 @@
     <string name="app_name">My Application</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_map_api">AIzaSyA5rPsuV-xypHvOYkxE-DiM1UfmtX5lU4w</string>
 </resources>
