@@ -18,6 +18,8 @@ import com.example.myapplication.api.UserRepository;
 import com.example.myapplication.model.UserItem;
 import com.example.myapplication.model.response.UserResponse;
 import com.example.myapplication.services.UserService;
+import com.example.myapplication.socket.NotificationHelper;
+import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
 
 import java.util.ArrayList;
@@ -43,6 +45,10 @@ public class MessageFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     UserService userService;
+
+    private SocketManager socketManager;
+
+    private NotificationHelper notificationHelper;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -73,6 +79,11 @@ public class MessageFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        notificationHelper = new NotificationHelper(getContext());
+        socketManager = SocketManager.getInstance(TokenManager.getId_user());
+        socketManager.connect();
+        notificationHelper.listenForNotification(socketManager);
     }
 
     private RecyclerView userRecyclerView;

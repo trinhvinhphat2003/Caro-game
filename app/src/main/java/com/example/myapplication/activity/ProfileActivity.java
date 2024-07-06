@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
+import com.example.myapplication.socket.NotificationHelper;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -21,11 +22,15 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton editUsernameButton;
     private ImageButton editEmailButton;
 
+    private NotificationHelper notificationHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
+
+        notificationHelper = new NotificationHelper(this);
 
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {

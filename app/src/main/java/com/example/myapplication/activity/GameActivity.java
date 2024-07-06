@@ -21,6 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
+import com.example.myapplication.socket.NotificationHelper;
 import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
 import com.squareup.picasso.Picasso;
@@ -52,6 +53,9 @@ public class GameActivity extends AppCompatActivity {
     public SocketManager socketManager;
 
 
+    private NotificationHelper notificationHelper;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +67,12 @@ public class GameActivity extends AppCompatActivity {
             return insets;
         });
 
+
         context = this;
         socketManager = SocketManager.getInstance(TokenManager.getId_user());
         socketManager.connect();
+        notificationHelper = new NotificationHelper(this);
+        notificationHelper.listenForNotification(socketManager);
         gameStatus = "ready";
         Intent intent = getIntent();
         String roomString = intent.getStringExtra("room");
