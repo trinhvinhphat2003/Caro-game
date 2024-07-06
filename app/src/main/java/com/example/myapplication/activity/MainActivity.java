@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.example.myapplication.fragment.home.HomeFragment;
+import com.example.myapplication.fragment.map.MapFragment;
 import com.example.myapplication.fragment.message.MessageFragment;
 import com.example.myapplication.model.Message;
 import com.example.myapplication.socket.SocketManager;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new HomeFragment());
             } else if (itemId == R.id.messageTab) {
                 replaceFragment(new MessageFragment());
+            } else if (itemId == R.id.mapTab) {
+                replaceFragment(new MapFragment());
             }
             return true;
         });
