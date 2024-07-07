@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
@@ -89,6 +92,9 @@ public class MessageFragment extends Fragment {
     private RecyclerView userRecyclerView;
     private UserAdapter userAdapter;
     private List<UserItem> userList;
+    private EditText searchEditText;
+
+    private ImageButton searchButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,13 +113,55 @@ public class MessageFragment extends Fragment {
 
         loadUser();
 
+        searchEditText = view.findViewById(R.id.searchEditText);
+        searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search = searchEditText.getText().toString();
+                if (search.isEmpty()){
+                    loadUser();
+                }else {
+                    try {
+                        Call<UserResponse> call = userService.getUsers("Bearer " + TokenManager.getToken(), search);
+                        call.enqueue(new Callback<UserResponse>() {
+                            @Override
+                            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                                if (response.body() != null){
+                                    UserResponse userResponse = response.body();
+                                    if (userResponse.isOnSuccess()) {
+                                        userList.clear();
+                                        for (UserItem userItem : userResponse.getData()) {
+                                            UserItem user = new UserItem(userItem.getFullName(), userItem.getProfilePic(), userItem.getId());
+                                            userList.add(user);
+                                        }
+                                        userAdapter.notifyDataSetChanged();
+                                    }
+                                    else {
+                                        Toast.makeText(getContext(), userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<UserResponse> call, Throwable t) {
+                                Toast.makeText(getContext(), "Fail to load user", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }catch ( Exception e){
+
+                    }
+                }
+            }
+        });
+
 
 
         return view;
     }
     private void loadUser(){
         try {
-            Call<UserResponse> call = userService.getUsers("Bearer " + TokenManager.getToken());
+            Call<UserResponse> call = userService.getUsers("Bearer " + TokenManager.getToken(), "");
             call.enqueue(new Callback<UserResponse>() {
                 @Override
                 public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {

@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Query;
 
 public interface UserService {
     String User = "user";
@@ -14,5 +15,5 @@ public interface UserService {
     String token = TokenManager.getToken();
 
     @GET(User)
-    Call<UserResponse> getUsers(@Header("Authorization") String token);
+    Call<UserResponse> getUsers(@Header("Authorization") String token, @Query("search") String search);
 }

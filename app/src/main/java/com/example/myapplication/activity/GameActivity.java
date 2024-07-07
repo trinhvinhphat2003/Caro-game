@@ -21,7 +21,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
-import com.example.myapplication.socket.NotificationHelper;
 import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
 import com.squareup.picasso.Picasso;
@@ -53,9 +52,6 @@ public class GameActivity extends AppCompatActivity {
     public SocketManager socketManager;
 
 
-    private NotificationHelper notificationHelper;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +63,9 @@ public class GameActivity extends AppCompatActivity {
             return insets;
         });
 
-
         context = this;
         socketManager = SocketManager.getInstance(TokenManager.getId_user());
         socketManager.connect();
-        notificationHelper = new NotificationHelper(this);
-        notificationHelper.listenForNotification(socketManager);
         gameStatus = "ready";
         Intent intent = getIntent();
         String roomString = intent.getStringExtra("room");
@@ -265,17 +258,19 @@ public class GameActivity extends AppCompatActivity {
                     user.put("wallet", String.valueOf(Integer.valueOf((String)user.get("wallet")).intValue()
                             + (isWinner ? gamePrice: -gamePrice))
                     );
-
+                    System.out.println("finish game");
                     playerTurnText.setText(
                             (isWinner ? "You win" : "You lose")
-                            + " ("
-                            + (isWinner ? "+" : "-")
-                            + gamePrice + " coins"
-                            + ")"
+                                    + " ("
+                                    + (isWinner ? "+" : "-")
+                                    + gamePrice + " coins"
+                                    + ")"
                     );
-
+                    System.out.println("finish game 1 " );
                     JSONArray winningCells = data.getJSONObject("result").getJSONArray("cells");
+                    System.out.println("finish game 2 " );
                     String winningMark = data.getJSONObject("result").getString("mark");
+
 
                     for (int i = 0; i < winningCells.length(); i++) {
                         JSONArray winningCell = winningCells.getJSONArray(i);
