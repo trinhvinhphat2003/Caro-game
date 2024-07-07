@@ -258,17 +258,19 @@ public class GameActivity extends AppCompatActivity {
                     user.put("wallet", String.valueOf(Integer.valueOf((String)user.get("wallet")).intValue()
                             + (isWinner ? gamePrice: -gamePrice))
                     );
-
+                    System.out.println("finish game");
                     playerTurnText.setText(
                             (isWinner ? "You win" : "You lose")
-                            + " ("
-                            + (isWinner ? "+" : "-")
-                            + gamePrice + " coins"
-                            + ")"
+                                    + " ("
+                                    + (isWinner ? "+" : "-")
+                                    + gamePrice + " coins"
+                                    + ")"
                     );
-
+                    System.out.println("finish game 1 " );
                     JSONArray winningCells = data.getJSONObject("result").getJSONArray("cells");
+                    System.out.println("finish game 2 " );
                     String winningMark = data.getJSONObject("result").getString("mark");
+
 
                     for (int i = 0; i < winningCells.length(); i++) {
                         JSONArray winningCell = winningCells.getJSONArray(i);

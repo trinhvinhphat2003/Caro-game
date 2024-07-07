@@ -21,6 +21,7 @@ import com.example.myapplication.model.Message;
 import com.example.myapplication.model.request.MessageRequest;
 import com.example.myapplication.model.response.MessageReponse;
 import com.example.myapplication.services.MessageService;
+import com.example.myapplication.socket.NotificationHelper;
 import com.example.myapplication.socket.SocketManager;
 import com.example.myapplication.tokenManager.TokenManager;
 
@@ -48,6 +49,8 @@ public class ChatActivity extends AppCompatActivity {
     MessageService messageService;
     private SocketManager socketManager;
 
+    private NotificationHelper notificationHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        notificationHelper = new NotificationHelper(this);
+
         messageService = MessageRepository.getMessageService();
         Intent intent = getIntent();
         String idReceiver = intent.getStringExtra("idReceiver");
@@ -77,11 +82,18 @@ public class ChatActivity extends AppCompatActivity {
                 try {
                     String message = data.getString("message");
                     receivedMessage = new Message(message, false);
+                    String idSender = data.getString("senderId");
+                    String senderName = data.getString("senderName");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            messages.add(receivedMessage);
-                            adapter.notifyDataSetChanged();
+
+                            if (idSender.equals(idReceiver)){
+                                messages.add(receivedMessage);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            notificationHelper.sendNotification(receivedMessage.getContent(), idSender, senderName);
                         }
                     });
                 } catch (JSONException e) {
