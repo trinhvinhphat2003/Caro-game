@@ -1,26 +1,53 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.GameHistoryAdapter;
+import com.example.myapplication.api.GameHistoryRepository;
+import com.example.myapplication.model.GameHistoryItem;
+import com.example.myapplication.model.Message;
+import com.example.myapplication.model.response.GameHistoryResponse;
+import com.example.myapplication.model.response.MessageReponse;
+import com.example.myapplication.services.GameService;
 import com.example.myapplication.socket.NotificationHelper;
+
+import com.example.myapplication.tokenManager.TokenManager;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private EditText usernameEditText;
-    private EditText emailEditText;
-    private ImageButton editUsernameButton;
-    private ImageButton editEmailButton;
+    private GameService gameService;
+    private ImageView avatar;
+    private Button btnLogout;
+    private TextView txtUsername, coinDisplay;
+    private RecyclerView rvHistory;
+    private JSONObject user = TokenManager.getUserObject();
+    private List<GameHistoryItem> gameHistoryItemList;
+    private GameHistoryAdapter GHAdapter;
 
     private NotificationHelper notificationHelper;
 
@@ -33,6 +60,8 @@ public class ProfileActivity extends AppCompatActivity {
         notificationHelper = new NotificationHelper(this);
 
         ImageButton backButton = findViewById(R.id.backButton);
+
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,73 +69,91 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        // Khai báo các thành phần trên giao diện
-        usernameEditText = findViewById(R.id.username);
-        emailEditText = findViewById(R.id.email);
-        editUsernameButton = findViewById(R.id.editUsername);
-        editEmailButton = findViewById(R.id.editEmail);
+        rvHistory = findViewById(R.id.rvHistory);
+        avatar = findViewById(R.id.avatar);
+        btnLogout = findViewById(R.id.btnLogout);
+        txtUsername = findViewById(R.id.txtUsername);
+        coinDisplay = findViewById(R.id.coinDisplay);
 
-        // Thiết lập sự kiện khi nhấn nút chỉnh sửa cho Username
-        editUsernameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Mở khóa EditText để chỉnh sửa
-                usernameEditText.setFocusableInTouchMode(true);
-                usernameEditText.setClickable(true);
-                usernameEditText.setFocusable(true);
-                usernameEditText.requestFocus();
-            }
-        });
+        gameService = GameHistoryRepository.getGameService();
 
-        // Thiết lập sự kiện khi nhấn nút chỉnh sửa cho Email
-        editEmailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Mở khóa EditText để chỉnh sửa
-                emailEditText.setFocusableInTouchMode(true);
-                emailEditText.setClickable(true);
-                emailEditText.setFocusable(true);
-                emailEditText.requestFocus();
-            }
-        });
-
-        // Load user data (you can load it from your database or shared preferences)
         loadUserData();
+        bindRecyclerView();
+        loadGameHistory();
 
-        // Xử lý sự kiện khi nhấn nút ghi
-        Button saveButton = findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lưu thông tin sau khi chỉnh sửa
-                saveUserInfo();
-                // Khóa EditText để ngăn người dùng chỉnh sửa tiếp
-                lockEditText();
+                logOutAndNavigateToLogin();
             }
         });
+
     }
 
     private void loadUserData() {
-        // For demonstration, hardcoding the values. Replace it with actual user data.
-        usernameEditText.setText("John Doe");
-        emailEditText.setText("john.doe@example.com");
+        StringBuilder coinDisplayTxt = new StringBuilder("Coins: ");
+        try {
+
+            txtUsername.setText(user.getString("fullName"));
+
+            Log.d("USER", user.toString());
+            String imageUrl = user.getString("profilePic");
+
+            Picasso.get().load(imageUrl).into(avatar);
+            coinDisplayTxt.append(String.valueOf(user.get("wallet")));
+            coinDisplay.setText(coinDisplayTxt);
+        } catch (JSONException e) {
+            //throw new RuntimeException(e);
+        }
     }
 
-    // Hàm lưu thông tin người dùng
-    private void saveUserInfo() {
-        String newUsername = usernameEditText.getText().toString();
-        String newEmail = emailEditText.getText().toString();
-        // Thực hiện lưu thông tin vào cơ sở dữ liệu hoặc nơi lưu trữ khác
-        // Ví dụ: SharedPreferences, Room Database, API call, ...
+    private void bindRecyclerView(){
+        rvHistory.setLayoutManager(new LinearLayoutManager(this));
+        gameHistoryItemList = new ArrayList<>();
+        GHAdapter = new GameHistoryAdapter(gameHistoryItemList);
+        rvHistory.setAdapter(GHAdapter);
+
     }
 
-    // Hàm khóa EditText để ngăn người dùng chỉnh sửa
-    private void lockEditText() {
-        usernameEditText.setFocusableInTouchMode(false);
-        usernameEditText.setClickable(false);
-        usernameEditText.setFocusable(false);
-        emailEditText.setFocusableInTouchMode(false);
-        emailEditText.setClickable(false);
-        emailEditText.setFocusable(false);
+    private void loadGameHistory(){
+
+
+
+        try {
+            Call<GameHistoryResponse> call = gameService.getGameHistory("Bearer " + TokenManager.getToken());
+
+            call.enqueue(new Callback<GameHistoryResponse>() {
+                @Override
+                public void onResponse(Call<GameHistoryResponse> call, Response<GameHistoryResponse> response) {
+                    if (response.body() != null) {
+                        GameHistoryResponse gameHistoryResponse = response.body();
+
+                        if (gameHistoryResponse.isOnSuccess()) {
+
+                            List<GameHistoryItem> historyList = gameHistoryResponse.getData();
+                            Log.d("GAMEDATA", historyList.toString());
+                            for (int i = 0; i < 5 && i < historyList.size(); i++) {
+                                GameHistoryItem history = historyList.get(i);
+                                gameHistoryItemList.add(new GameHistoryItem(history.getPrice(), history.getResult(), history.getCompetitor(), history.getCreatedAt()));
+                            }
+                            GHAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<GameHistoryResponse> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+    private void logOutAndNavigateToLogin() {
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
