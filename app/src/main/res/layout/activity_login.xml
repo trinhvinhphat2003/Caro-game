@@ -19,9 +19,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@drawable/top_section_bg"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView"
@@ -37,10 +36,7 @@
             android:background="@drawable/top_section_bg"
             android:text="CARO-ZONE"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            app:backgroundTint="@null"
-            tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="50dp" />
+            android:textSize="20sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -74,9 +70,9 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/rounded_edittext_bg"
                     android:hint="Username"
-                    android:text="mumu"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp" />
+                    android:paddingEnd="12dp"
+                    android:text="mumu" />
 
                 <EditText
                     android:id="@+id/password"
@@ -84,10 +80,10 @@
                     android:layout_height="50dp"
                     android:background="@drawable/rounded_edittext_bg"
                     android:hint="Password"
-                    android:text="mumu"
                     android:inputType="textPassword"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp" />
+                    android:paddingEnd="12dp"
+                    android:text="mumu" />
 
                 <Button
                     android:id="@+id/loginButton"

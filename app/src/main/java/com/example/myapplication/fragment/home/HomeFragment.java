@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -119,6 +120,8 @@ public class HomeFragment extends Fragment {
         try {
             playerName.setText(user.getString("fullName"));
 
+            Log.d("USER", user.toString());
+
             String imageUrl = user.getString("profilePic");
             Picasso.get().load(imageUrl).into(avatar);
 
@@ -138,7 +141,7 @@ public class HomeFragment extends Fragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupMenu(v);
+                navigateToProfile();
             }
         });
 
@@ -163,23 +166,24 @@ public class HomeFragment extends Fragment {
     }
 
     private void showPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-        MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.avatar_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
+//        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+//        MenuInflater inflater = popupMenu.getMenuInflater();
+//        inflater.inflate(R.menu.avatar_menu, popupMenu.getMenu());
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//
+//                int itemId =  item.getItemId();
+//                if(itemId == R.id.menu_profile) {
+//                    navigateToProfile();
+//                } else if (itemId == R.id.menu_logout) {
+//                    navigateToLogin();
+//                }
+//                return true;
+//            }
+//        });
+//        popupMenu.show();
 
-                int itemId =  item.getItemId();
-                if(itemId == R.id.menu_profile) {
-                    navigateToProfile();
-                } else if (itemId == R.id.menu_logout) {
-                    navigateToLogin();
-                }
-                return true;
-            }
-        });
-        popupMenu.show();
     }
 
     private void navigateToProfile() {
@@ -187,11 +191,11 @@ public class HomeFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void navigateToLogin() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-    }
+//    private void navigateToLogin() {
+//        Intent intent = new Intent(getActivity(), LoginActivity.class);
+//        startActivity(intent);
+//        getActivity().finish();
+//    }
 
 
     private void showDialog(Context context){

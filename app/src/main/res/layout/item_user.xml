@@ -24,10 +24,10 @@
             android:id="@+id/userNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
             android:text="Username"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-medium"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
 
     </LinearLayout>
