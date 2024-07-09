@@ -1,6 +1,7 @@
 package com.example.myapplication.adapter;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,14 @@ import java.util.List;
 
 public class GameHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
+    private final RecyclerViewInterface recyclerViewInterface;
     private List<GameHistoryItem> history;
 
-    public GameHistoryAdapter(List<GameHistoryItem> history) {
+    public GameHistoryAdapter(List<GameHistoryItem> history, RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
         this.history = history;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +39,8 @@ public class GameHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         View view;
 
         view = inflater.inflate(R.layout.item_match_history, parent, false);
-        return new GameHistoryViewHolder(view);
+
+        return new GameHistoryViewHolder(view, recyclerViewInterface);
 
     }
 
@@ -52,15 +56,31 @@ public class GameHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return history.size();
     }
 
-    static class GameHistoryViewHolder extends RecyclerView.ViewHolder {
+    public static class GameHistoryViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName, txtMatchResult;
         private ImageView imgAvatar;
 
-        GameHistoryViewHolder(@NonNull View itemView) {
+        public GameHistoryViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txtPlayerName);
             txtMatchResult = itemView.findViewById(R.id.txtMatchResult);
             imgAvatar = itemView.findViewById(R.id.imgPlayerAvatar);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("RecylerClick", "clicked 1");
+
+                    if(recyclerViewInterface != null){
+                        int position = getAdapterPosition();
+
+                        if(position != RecyclerView.NO_POSITION){
+                            Log.d("RecylerClick", "clicked 3");
+                            recyclerViewInterface.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
 
         void bind(GameHistoryItem gameHistoryItem) {
