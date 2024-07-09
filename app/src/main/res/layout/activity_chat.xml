@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".activity.ChatActivity">
 
     <!-- Header Layout -->
@@ -58,7 +59,6 @@
         android:id="@+id/messageInputLayout"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginBottom="48dp"
         android:padding="8dp"
         android:layout_alignParentBottom="true"
         android:background="@android:color/white">
