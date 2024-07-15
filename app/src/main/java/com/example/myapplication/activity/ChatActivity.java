@@ -110,7 +110,7 @@ public class ChatActivity extends AppCompatActivity {
         editTextMessage = findViewById(R.id.messageInputEditText);
         buttonSendMessage = findViewById(R.id.sendButton);
         textViewFullName = findViewById(R.id.titleTextView);
-        textViewFullName.setText(idReceiver + " - " + fullName);
+        textViewFullName.setText(fullName);
 
         // Initialize RecyclerView
         recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));

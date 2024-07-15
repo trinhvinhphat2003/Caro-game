@@ -18,7 +18,7 @@ import io.socket.emitter.Emitter;
 public class SocketManager {
     private static SocketManager instance;
     private Socket mSocket;
-    private static final String SOCKET_URL = "http://10.0.2.2:8000";
+    private static final String SOCKET_URL = "http://192.168.1.227:8000";
     private SocketCallback callback;
     public SocketManager(String userId) {
         try {

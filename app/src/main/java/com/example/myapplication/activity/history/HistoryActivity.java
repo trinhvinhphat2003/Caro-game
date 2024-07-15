@@ -89,9 +89,9 @@ public class HistoryActivity extends AppCompatActivity implements RecyclerViewIn
                         if (gameHistoryResponse.isOnSuccess()) {
 
                             List<GameHistoryItem> historyList = gameHistoryResponse.getData();
-                            Log.d("GAMEDATA", historyList.toString());
                             for (GameHistoryItem history : historyList) {
                                 gameHistoryItemList.add(new GameHistoryItem(history.getPrice(), history.getResult(), history.getCompetitor(), history.getCreatedAt()));
+
                             }
                             GHAdapter.notifyDataSetChanged();
                         }

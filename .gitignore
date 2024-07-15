@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/src/main/java/com/example/myapplication/socket/SocketManager.java
+app/src/main/java/com/example/myapplication/api/APIClient.java
